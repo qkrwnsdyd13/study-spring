@@ -1,8 +1,9 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><title>STARLOG</title></head>
-<body>
 <h1>STARLOG</h1>
-<a th:href="@{/auth/register}">회원가입</a>
-</body>
-</html>
+<div th:if="${nickname}">
+    <span th:text="${nickname} + '님 환영합니다'"></span>
+    <a th:href="@{/auth/logout}">로그아웃</a>
+</div>
+<div th:unless="${nickname}">
+    <a th:href="@{/auth/login}">로그인</a>
+    <a th:href="@{/auth/register}">회원가입</a>
+</div>

@@ -24,4 +24,15 @@ public class UserService {
         String encoded = passwordEncoder.encode(form.getPassword());
         userRepository.save(new User(form.getUsername(), encoded, form.getNickname()));
     }
+
+    
+    public User login(String username, String password){
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new IllegalArgumentException("아이디 또는 비밀번호가 틀립니다"));
+
+        if(!passwordEncoder.matches(password, user.getPassword())){
+            throw new IllegalArgumentException("아이디 또는 비밀번호가 틀립니다.");
+        }
+
+        return user;
+    }
 }
