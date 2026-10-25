@@ -27,3 +27,10 @@
 - 진짜 원인: Repository 메서드 이름 오타 (ex가 중복)
 - 해결: existsByUsername으로 수정
 - 배운 점: JPA는 메서드 이름을 해석해서 SQL을 만들기 때문에, 이름 오타가 곧 실행 에러가 된다. 에러 메시지의 이름을 "원래 의도한 이름"과 비교해야 한다
+
+## 실험: @ManyToOne 제거
+- 핵심 메시지: MappingException: Incorrect use of entity type 'User'
+               (possibly due to missing association mapping annotation)
+- 해석: User 엔티티를 Post 필드로 썼는데 관계 어노테이션이 없음
+- 배운 점: 엔티티를 필드로 쓰면 반드시 @ManyToOne 등으로 관계를 알려줘야 한다.
+           에러 위치(User)와 고칠 위치(Post)가 다를 수 있다.
