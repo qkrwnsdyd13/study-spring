@@ -34,3 +34,13 @@
 - 해석: User 엔티티를 Post 필드로 썼는데 관계 어노테이션이 없음
 - 배운 점: 엔티티를 필드로 쓰면 반드시 @ManyToOne 등으로 관계를 알려줘야 한다.
            에러 위치(User)와 고칠 위치(Post)가 다를 수 있다.
+
+
+”final/@RequiredArgsConstructor 빠지면 컴파일은 되는데 NullPointerException”
+
+## 에러: 로그인 후 404 (/;jsessionid=...)
+- 핵심 메시지: No static resource for request '/;jsessionid=...'
+- 단서: 주소 뒤에 jsessionid가 붙어 있음
+- 원인: 세션을 처음 만들 때 톰캣이 쿠키 지원 여부를 몰라 URL에도 세션 ID를 붙임 → 스프링이 그 주소를 매핑 못 함
+- 해결: server.servlet.session.tracking-modes=cookie
+- 배운 점: 세션 ID가 URL에 노출되면 보안 위험(세션 하이재킹). 쿠키로만 주고받는 게 안전

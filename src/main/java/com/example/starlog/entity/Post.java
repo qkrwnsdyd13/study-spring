@@ -43,6 +43,10 @@ public class Post {
 
     private LocalDateTime updated_at;
 
+    public void increaseViewCount() {
+        this.viewCount++;
+    }
+
     public Post(String title, String content, User user) {
         this.title = title;
         this.content = content;

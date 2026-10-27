@@ -2,8 +2,10 @@
 <div th:if="${nickname}">
     <span th:text="${nickname} + '님 환영합니다'"></span>
     <a th:href="@{/auth/logout}">로그아웃</a>
+    <a th:href="@{/posts/write}">글쓰기</a>
 </div>
 <div th:unless="${nickname}">
     <a th:href="@{/auth/login}">로그인</a>
     <a th:href="@{/auth/register}">회원가입</a>
 </div>
+<a th:href="@{/posts}">게시판</a>
