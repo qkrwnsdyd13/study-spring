@@ -4,9 +4,23 @@
 <body>
 <h2>🔮 오늘의 운세</h2>
 
-<p th:if="${content}" th:text="${content}" style="white-space: pre-line;"></p>
-<p th:if="${message}" th:text="${message}" style="color:gray"></p>
+<p id="fortune" style="white-space: pre-line;">운세를 준비 중입니다…</p>
 
 <a th:href="@{/}">홈으로</a>
+<script>
+  async function loadFortune() {
+    const box = document.getElementById("fortune");
+    try {
+      const res = await fetch("/api/fortune");    // 응답 올 때까지 기다림 (화면은 멈추지 않음)
+      const data = await res.json();              // JSON으로 바꾸기
+      box.textContent = res.ok ? data.content : data.message;
+      if (!res.ok) box.style.color = "gray";
+    } catch (e) {
+      box.textContent = "연결에 문제가 있어요. 잠시 후 다시 시도해 주세요.";
+      box.style.color = "gray";
+    }
+  }
+  loadFortune();
+</script>
 </body>
 </html>
