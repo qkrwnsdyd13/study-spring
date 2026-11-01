@@ -22,7 +22,8 @@ public class UserService {
             throw new IllegalArgumentException("이미 사용 중인 아이디입니다");
         }
         String encoded = passwordEncoder.encode(form.getPassword());
-        userRepository.save(new User(form.getUsername(), encoded, form.getNickname()));
+        System.out.println("폼에서 받은 생년월일: " + form.getBirthDate());
+        userRepository.save(new User(form.getUsername(), encoded, form.getNickname(), form.getBirthDate()));
     }
 
     

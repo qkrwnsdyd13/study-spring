@@ -1,5 +1,6 @@
 package com.example.starlog.entity;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
@@ -32,10 +33,13 @@ public class User {
 
     private LocalDateTime createdAt;                      // created_at 컬럼이 됨
 
-    public User(String username, String password, String nickname) {
+    private LocalDate birthDate;
+
+    public User(String username, String password, String nickname, LocalDate birthDate) {
         this.username = username;
         this.password = password;
         this.nickname = nickname;
         this.createdAt = LocalDateTime.now();
+        this.birthDate = birthDate;
     }
 }

@@ -10,6 +10,8 @@
         <span th:errors="*{password}" style="color:red"></span></div>
     <div>닉네임 <input type="text" th:field="*{nickname}">
         <span th:errors="*{nickname}" style="color:red"></span></div>
+    <div>생년월일 (선택) <input type="date" th:field="*{birthDate}">
+        <span th:errors="*{birthDate}" style="color:red"></span></div>
     <button type="submit">가입</button>
 </form>
 </body>
