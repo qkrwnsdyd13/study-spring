@@ -1,24 +1,45 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><title>오늘의 운세</title></head>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('오늘의 운세')}"></head>
 <body>
-<h2>🔮 오늘의 운세</h2>
+<header th:replace="~{fragments/layout :: header}"></header>
 
-<p id="fortune" style="white-space: pre-line;">운세를 준비 중입니다…</p>
+<main class="container">
+  <h1 class="page-title">오늘의 운세</h1>
+  <p class="page-desc">생년월일을 바탕으로 AI가 풀어 드려요. 하루에 한 번 바뀝니다.</p>
 
-<a th:href="@{/}">홈으로</a>
+  <div class="card">
+    <p id="fortune" class="fortune-text" aria-busy="true" aria-live="polite">운세를 준비 중입니다…</p>
+  </div>
+
+  <div class="actions" style="margin-top:16px">
+    <a class="btn btn-outline" th:href="@{/}">홈으로</a>
+  </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+
 <script>
-  async function loadFortune() {
+  // 서버가 잠들어 있으면(503) 최대 3번까지 5초 간격으로 다시 시도
+  async function loadFortune(tries = 0) {
     const box = document.getElementById("fortune");
     try {
-      const res = await fetch("/api/fortune");    // 응답 올 때까지 기다림 (화면은 멈추지 않음)
-      const data = await res.json();              // JSON으로 바꾸기
-      box.textContent = res.ok ? data.content : data.message;
-      if (!res.ok) box.style.color = "gray";
+      const res = await fetch("/api/fortune");
+      const data = await res.json();
+
+      if (res.status === 503 && tries < 2) {
+        box.textContent = "AI 서버를 깨우는 중이에요… 잠시만 기다려 주세요.";
+        setTimeout(() => loadFortune(tries + 1), 5000);
+        return;
+      }
+
+      box.textContent = res.ok ? data.content : data.message;  // textContent = XSS 안전
+      box.classList.toggle("is-muted", !res.ok);
     } catch (e) {
       box.textContent = "연결에 문제가 있어요. 잠시 후 다시 시도해 주세요.";
-      box.style.color = "gray";
+      box.classList.add("is-muted");
     }
+    box.setAttribute("aria-busy", "false");
   }
   loadFortune();
 </script>

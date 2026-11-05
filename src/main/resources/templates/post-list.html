@@ -1,19 +1,30 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><title>게시판</title></head>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('게시판')}"></head>
 <body>
-<h2>게시판</h2>
-<a th:href="@{/posts/write}">글쓰기</a> | <a th:href="@{/}">홈</a>
-<table border="1">
-    <tr><th>번호</th><th>제목</th><th>작성자</th><th>작성일</th><th>조회</th></tr>
-    <tr th:each="post : ${posts}">
-        <td th:text="${post.id}"></td>
-        <td><a th:href="@{/posts/{id}(id=${post.id})}" th:text="${post.title}"></a></td>
-        <td th:text="${post.user.nickname}"></td>
-        <td th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
-        <td th:text="${post.viewCount}"></td>
-    </tr>
-</table>
-<p th:if="${#lists.isEmpty(posts)}">아직 글이 없습니다.</p>
+<header th:replace="~{fragments/layout :: header}"></header>
+
+<main class="container">
+  <div class="list-head">
+    <div>
+      <h1 class="page-title">게시판</h1>
+      <p class="page-desc" style="margin:0">모두의 이야기</p>
+    </div>
+    <a class="btn" th:href="@{/posts/write}">글쓰기</a>
+  </div>
+
+  <ul class="post-list" th:if="${!posts.isEmpty()}">
+    <li class="post-item" th:each="post : ${posts}">
+      <a th:href="@{/posts/{id}(id=${post.id})}">
+        <strong th:text="${post.title}">제목</strong>
+        <span class="post-meta" th:text="${post.user.nickname}">작성자</span>
+      </a>
+    </li>
+  </ul>
+
+  <p class="empty" th:if="${posts.isEmpty()}">아직 글이 없어요. 첫 글을 남겨 보세요.</p>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
 </body>
 </html>

@@ -1,18 +1,47 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><title>회원가입</title></head>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('회원가입')}"></head>
 <body>
-<h2>회원가입</h2>
-<form th:action="@{/auth/register}" th:object="${form}" method="post">
-    <div>아이디 <input type="text" th:field="*{username}">
-        <span th:errors="*{username}" style="color:red"></span></div>
-    <div>비밀번호 <input type="password" th:field="*{password}">
-        <span th:errors="*{password}" style="color:red"></span></div>
-    <div>닉네임 <input type="text" th:field="*{nickname}">
-        <span th:errors="*{nickname}" style="color:red"></span></div>
-    <div>생년월일 (입력해야 운세를 볼 수 있어요) <input type="date" th:field="*{birthDate}">
-        <span th:errors="*{birthDate}" style="color:red"></span></div>
-    <button type="submit">가입</button>
-</form>
+<header th:replace="~{fragments/layout :: header}"></header>
+
+<main class="container narrow">
+  <h1 class="page-title">회원가입</h1>
+  <p class="page-desc">몇 가지만 입력하면 끝나요.</p>
+
+  <div class="card">
+    <form class="form" th:action="@{/auth/register}" th:object="${form}" method="post">
+
+      <div class="field">
+        <label for="username">아이디</label>
+        <input type="text" id="username" th:field="*{username}" autocomplete="username">
+        <p class="field-error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></p>
+      </div>
+
+      <div class="field">
+        <label for="password">비밀번호</label>
+        <input type="password" id="password" th:field="*{password}" autocomplete="new-password">
+        <p class="field-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+      </div>
+
+      <div class="field">
+        <label for="nickname">닉네임</label>
+        <input type="text" id="nickname" th:field="*{nickname}">
+        <p class="field-error" th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}"></p>
+      </div>
+
+      <div class="field">
+        <label for="birthDate">생년월일</label>
+        <input type="date" id="birthDate" th:field="*{birthDate}">
+        <p class="field-error" th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}"></p>
+      </div>
+
+      <button type="submit" class="btn">가입하기</button>
+    </form>
+  </div>
+
+  <p class="helper">이미 계정이 있나요? <a th:href="@{/auth/login}">로그인</a></p>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
 </body>
 </html>

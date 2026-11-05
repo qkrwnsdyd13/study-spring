@@ -1,16 +1,24 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><title th:text="${post.title}">글</title></head>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('게시글')}"></head>
 <body>
-<h2 th:text="${post.title}"></h2>
-<p>
-    작성자: <span th:text="${post.user.nickname}"></span> |
-    <span th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}"></span> |
-    조회 <span th:text="${post.viewCount}"></span>
-</p>
-<hr>
-<div th:text="${post.content}" style="white-space: pre-wrap;"></div>
-<hr>
-<a th:href="@{/posts}">목록</a>
+<header th:replace="~{fragments/layout :: header}"></header>
+
+<main class="container">
+  <article class="card">
+    <h1 class="page-title" th:text="${post.title}">제목</h1>
+    <p class="page-desc">
+      <span th:text="${post.user.nickname}">작성자</span>
+    </p>
+    <hr style="border:none;border-top:1px solid var(--line);margin:16px 0">
+    <p style="white-space: pre-line;" th:text="${post.content}">내용</p>
+  </article>
+
+  <div class="actions" style="margin-top:16px">
+    <a class="btn btn-outline" th:href="@{/posts}">목록으로</a>
+  </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
 </body>
 </html>

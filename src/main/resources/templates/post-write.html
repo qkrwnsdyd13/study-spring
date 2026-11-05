@@ -1,14 +1,36 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><title>글쓰기</title></head>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('글쓰기')}"></head>
 <body>
-<h2>글쓰기</h2>
-<form th:action="@{/posts/write}" th:object="${form}" method="post">
-    <div>제목<br><input type="text" th:field="*{title}" size="60">
-        <span th:errors="*{title}" style="color:red"></span></div>
-    <div>내용<br><textarea th:field="*{content}" rows="10" cols="60"></textarea>
-        <span th:errors="*{content}" style="color:red"></span></div>
-    <button type="submit">등록</button>
-</form>
+<header th:replace="~{fragments/layout :: header}"></header>
+
+<main class="container">
+  <h1 class="page-title">글쓰기</h1>
+  <p class="page-desc">생각을 자유롭게 남겨 보세요.</p>
+
+  <div class="card">
+    <form class="form" th:action="@{/posts/write}" th:object="${form}" method="post">
+
+      <div class="field">
+        <label for="title">제목</label>
+        <input type="text" id="title" th:field="*{title}" placeholder="제목을 입력하세요">
+        <p class="field-error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>
+      </div>
+
+      <div class="field">
+        <label for="content">내용</label>
+        <textarea id="content" th:field="*{content}" placeholder="내용을 입력하세요"></textarea>
+        <p class="field-error" th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></p>
+      </div>
+
+      <div class="actions">
+        <a class="btn btn-outline" th:href="@{/}">취소</a>
+        <button type="submit" class="btn">등록</button>
+      </div>
+    </form>
+  </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
 </body>
 </html>
