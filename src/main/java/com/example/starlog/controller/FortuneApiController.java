@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestClientException;
 
 import com.example.starlog.service.FortuneService;
@@ -33,6 +34,8 @@ public class FortuneApiController {
             return ResponseEntity.ok(Map.of("content", fortuneService.getTodayFortune(userId)));
         } catch (IllegalStateException e) {
             return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        } catch (HttpServerErrorException.ServiceUnavailable e) {        // 503
+            return ResponseEntity.status(503).body(Map.of("message", "지금 AI 사용자가 많아요. 잠시 후 다시 시도해 주세요."));
         } catch (RestClientException e) {
             System.out.println("AI 서버 호출 실패: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
