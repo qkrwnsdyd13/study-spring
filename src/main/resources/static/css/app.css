@@ -254,3 +254,34 @@ textarea { min-height: 220px; resize: vertical; }
   gap: 12px;
   margin-bottom: 16px;
 }
+
+/* 채팅 */
+.chat-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 320px;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+.chat-empty { color: var(--muted); text-align: center; margin: auto; }
+
+.chat-msg {
+  max-width: 80%;
+  margin: 0;
+  padding: 10px 14px;
+  border-radius: 12px;
+  white-space: pre-line;
+  line-height: 1.6;
+}
+.chat-msg.me  { align-self: flex-end;   background: var(--fg);  color: var(--bg); }
+.chat-msg.bot { align-self: flex-start; border: 1px solid var(--line); }
+.chat-msg.is-muted { color: var(--muted); }
+
+.chat-form { display: flex; gap: 8px; margin-top: 12px; }
+.chat-form input { flex: 1; }
+.chat-form .btn:disabled { opacity: .4; cursor: not-allowed; }
+
+@media (max-width: 639px) {
+  .chat-msg { max-width: 90%; }
+}

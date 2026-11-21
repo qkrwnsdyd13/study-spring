@@ -42,5 +42,18 @@ public class AiClient {
         return response.content();
     }
 
+    public record AskRequest(String question) {}
+    public record AskResponse(String answer) {}
+
+    public String ask(String question) {
+        AskResponse res = restClient.post()
+                .uri("/ask")              // FastAPI 주소
+                .header("X-Internal-Key", internalKey)
+                .body(new AskRequest(question))
+                .retrieve()
+                .body(AskResponse.class);                          // 응답을 어떤 클래스로 받을지
+        return res.answer();
+    }
     
 }
+
