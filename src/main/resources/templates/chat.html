@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('학사일정 도우미')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+
+<main class="container">
+  <h1 class="page-title">학사일정 도우미</h1>
+  <p class="page-desc">학교 일정을 물어보세요. 예: "기말고사 언제야?", "다음 주에 뭐 있어?"</p>
+
+  <div class="card chat-box" id="chat-box">
+    <p class="chat-empty" id="chat-empty">아직 질문이 없어요.</p>
+  </div>
+
+  <form class="chat-form" id="chat-form">
+    <input type="text" id="question" maxlength="50" placeholder="질문을 입력하세요 (50자까지)" autocomplete="off" required>
+    <button type="submit" class="btn" id="send-btn">보내기</button>
+  </form>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+
+<script>
+  const box = document.getElementById("chat-box");
+  const form = document.getElementById("chat-form");
+  const input = document.getElementById("question");
+  const btn = document.getElementById("send-btn");
+
+  // 말풍선 하나 추가하기
+  function addMessage(text, who) {
+    document.getElementById("chat-empty")?.remove();
+    const p = document.createElement("p");
+    p.className = "chat-msg " + who;        // who: "me" 또는 "bot"
+    p.textContent = text;                    // innerHTML 대신 textContent → XSS 안전
+    box.appendChild(p);
+    box.scrollTop = box.scrollHeight;        // 맨 아래로 스크롤
+    return p;
+  }
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();                      // 폼 기본 동작(페이지 새로고침) 막기
+    const question = input.value.trim();
+    if (!question) return;
+
+    addMessage(question, "me");
+    input.value = "";
+    btn.disabled = true;                     // 답 올 때까지 중복 전송 막기
+    const waiting = addMessage("답변을 찾는 중이에요…", "bot is-muted");
+
+    try {
+      const res = await fetch("/api/ask", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question: question }),
+      });
+      const data = await res.json();
+      waiting.textContent = res.ok ? data.answer : data.message;
+      waiting.classList.toggle("is-muted", !res.ok);
+    } catch (err) {
+      waiting.textContent = "연결에 문제가 있어요. 잠시 후 다시 시도해 주세요.";
+    } finally {
+      btn.disabled = false;
+      input.focus();
+    }
+  });
+</script>
+</body>
+</html>
